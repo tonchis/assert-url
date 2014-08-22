@@ -12,7 +12,7 @@ test "assert_url" do |url|
   assert assert_url(url, url)
 
   assert_raise do
-    assert_scheme("https://example.org", url)
+    assert_url("https://example.org", url)
   end
 end
 
