@@ -31,21 +31,21 @@ def test_some_resource
   get "/some/resource"
 
   assert last_response.ok?
-  assert_path "http://dont.care.org/some/resource", last_response.url
+  assert_path_equal "/some/resource", last_response.url
 end
 ```
 
-Now you can change the port, host, even the query and the test will be fine.
+BAM! Now you're only testing what you need. You can change the port, host, even the query and the test will be fine.
 
-`AssertUrl` provides the following methods:
-* `assert_scheme`
-* `assert_host`
-* `assert_port`
-* `assert_path`
-* `assert_query`
-* `assert_url`
-
-And you can send `String` or `URI` objects to them.
+`AssertUrl` provides the following assertions in the form of `expected, value`:
+* `assert_scheme_equal [String or Symbol], [String or URI]`
+* `assert_host_equal [String], [String or URI]`
+* `assert_port_equal [Integer], [String or URI]`
+* `assert_path_equal [String starting with "/"], [String or URI]`
+* `assert_query_equal [Hash], [String or URI]`
+* `assert_query_include [Hash], [String or URI]`
+* `assert_fragment_equal [String], [String or URI]`
+* `assert_url_equal [String or URI], [String or URI]`
 
 ### But...
 
