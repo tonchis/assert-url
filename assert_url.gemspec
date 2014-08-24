@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "assert-url"
-  s.version = "0.0.1"
+  s.version = "1.0.0"
   s.summary = "Semantical helpers to test your URLs in Ruby"
   s.description = s.summary
   s.authors = ["Lucas Tolchinsky"]
