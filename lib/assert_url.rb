@@ -1,17 +1,45 @@
 require "uri"
 
 module AssertUrl
-  PARTS = %W[scheme host port path query fragment]
+  PARTS = %W[scheme host port path query fragment].each do |part|
+    const_set("#{part.capitalize}Error", Class.new(StandardError))
+  end
 
-  PARTS.each do |part|
-    error = const_set("#{part.capitalize}Error", Class.new(StandardError))
+  def assert_scheme_equal(expected, value)
+    value = urify(value)
 
-    define_method(:"assert_#{part}_equal") do |expected, value|
-      expected = normalize(part, expected)
-      value = urify(value).send(part.to_sym)
+    expected.to_s == value.scheme || raises(SchemeError, expected, value)
+  end
 
-      expected == value || (raise error, "expected #{expected}, got #{value}")
-    end
+  def assert_host_equal(expected, value)
+    value = urify(value)
+
+    expected == value.host || raises(HostError, expected, value)
+  end
+
+  def assert_port_equal(expected, value)
+    value = urify(value)
+
+    expected == value.port || raises(PortError, expected, value)
+  end
+
+  def assert_path_equal(expected, value)
+    value = urify(value)
+
+    expected == value.path || raises(PathError, expected, value)
+  end
+
+  def assert_query_equal(expected, value)
+    value = urify(value)
+    expected = (URI.encode_www_form(expected) rescue expected)
+
+    expected == value.query || raises(QueryError, expected, value)
+  end
+
+  def assert_fragment_equal(expected, value)
+    value = urify(value)
+
+    expected == value.fragment || raises(FragmentError, expected, value)
   end
 
   def assert_url_equal(expected, value)
@@ -39,16 +67,9 @@ module AssertUrl
   end
   private :urify
 
-  def normalize(part, expected)
-    case part
-    when "scheme"
-      expected.kind_of?(Symbol) ? expected.to_s : expected
-    when "query"
-      URI.encode_www_form(expected) rescue expected
-    else
-      expected
-    end
+  def raises(error, expected, value)
+    raise error, "expected #{expected}, got #{value}"
   end
-  private :normalize
+  private :raises
 end
 
