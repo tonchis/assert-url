@@ -110,7 +110,19 @@ module AssertUrl
   def assert_query_include(expected, value)
     value = Hash[URI.decode_www_form(urify(value).query)]
 
-    includes?(expected.to_a, value) || (raise QueryError, "expected #{value} to include #{expected}")
+    validation = -> { includes?(expected.to_a, value) }
+
+    cutest_or_standalone(validation, [QueryError, "expected #{value} to include #{expected}"])
+  end
+
+  def cutest_or_standalone(validation, error)
+    if defined?(Cutest)
+      cutest_eval do
+        validation.() || (throw :cutest_fail, error.last)
+      end
+    else
+      validation.() || (raise *error)
+    end
   end
 
   def includes?(expected, got)

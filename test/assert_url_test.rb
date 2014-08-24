@@ -52,7 +52,11 @@ end
 test "assert_query_include" do
   assert assert_query_include({foo: "bar"}, "http://example.org/?foo=bar&baz=wat")
 
-  assert_raise(AssertUrl::QueryError) do
+  # assert_raise(AssertUrl::QueryError) do
+    # assert_query_include({foo: "wat"}, "http://example.org/?foo=bar&baz=wat")
+  # end
+
+  assert_raise(Cutest::AssertionFailed) do
     assert_query_include({foo: "wat"}, "http://example.org/?foo=bar&baz=wat")
   end
 end
