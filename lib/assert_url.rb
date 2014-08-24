@@ -14,9 +14,9 @@ module AssertUrl
   #   assert_scheme_equal("http", "http://example.org")
   #
   def assert_scheme_equal(expected, value)
-    value = urify(value)
+    value = urify(value).scheme
 
-    expected.to_s == value.scheme || raises(SchemeError, expected, value)
+    expected.to_s == value || raises(SchemeError, expected, value)
   end
 
   # @param [String] expected The host the url should have.
@@ -27,9 +27,9 @@ module AssertUrl
   #   assert_host_equal("example.org", "http://example.org")
   #
   def assert_host_equal(expected, value)
-    value = urify(value)
+    value = urify(value).host
 
-    expected == value.host || raises(HostError, expected, value)
+    expected == value || raises(HostError, expected, value)
   end
 
   # @param [Integer] expected The port the url should have.
@@ -40,9 +40,9 @@ module AssertUrl
   #   assert_port_equal(80, "http://example.org")
   #
   def assert_port_equal(expected, value)
-    value = urify(value)
+    value = urify(value).port
 
-    expected == value.port || raises(PortError, expected, value)
+    expected == value || raises(PortError, expected, value)
   end
 
   # @param [String] expected The path the url should have.
@@ -53,9 +53,9 @@ module AssertUrl
   #   assert_path_equal("/path", "http://example.org/path")
   #
   def assert_path_equal(expected, value)
-    value = urify(value)
+    value = urify(value).path
 
-    expected == value.path || raises(PathError, expected, value)
+    expected == value || raises(PathError, expected, value)
   end
 
   # @param [Hash] expected The query the url should have.
@@ -66,10 +66,10 @@ module AssertUrl
   #   assert_query_equal({foo: "bar"}, "http://example.org/?foo=bar")
   #
   def assert_query_equal(expected, value)
-    value = urify(value)
+    value = urify(value).query
     expected = (URI.encode_www_form(expected) rescue expected)
 
-    expected == value.query || raises(QueryError, expected, value)
+    expected == value || raises(QueryError, expected, value)
   end
 
   # @param [String] expected The fragment the url should have.
@@ -80,9 +80,9 @@ module AssertUrl
   #   assert_fragment_equal("fragment", "http://example.org/path#fragment")
   #
   def assert_fragment_equal(expected, value)
-    value = urify(value)
+    value = urify(value).fragment
 
-    expected == value.fragment || raises(FragmentError, expected, value)
+    expected == value || raises(FragmentError, expected, value)
   end
 
   # {#assert_url_equal} runs all the validations above. It's not a String comparison.
