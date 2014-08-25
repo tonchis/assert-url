@@ -58,6 +58,8 @@ module AssertUrl
     expected == value || raises(PathError, expected, value)
   end
 
+  # The comparison is "String vs Symbol" safe for the keys.
+  #
   # @param [Hash] expected The query the url should have.
   # @param [String or URI] value The url you wish to validate.
   #
@@ -100,6 +102,8 @@ module AssertUrl
     PARTS.map { |part| send(:"assert_#{part}_equal", expected.send(part.to_sym), value) }.reduce(:&)
   end
 
+  # The comparison is "String vs Symbol" safe for the keys.
+  #
   # @param [String or Symbol] expected The key-value pairs that the url must include.
   # @param [String or URI] value The url you wish to validate.
   #
